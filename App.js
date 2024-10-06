@@ -1,20 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { WorkoutProvider } from './context/WorkoutContext';
+import AddWorkout from './screens/AddWorkout';
+import ExerciseHistory from './screens/ExerciseHistory';
+import Settings from './screens/Settings';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <WorkoutProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="AddWorkout"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              let iconName;
+              if (route.name === 'AddWorkout') {
+                iconName = 'add-circle-outline';
+              } else if (route.name === 'ExerciseHistory') {
+                iconName = 'history';
+              } else if (route.name === 'Settings') {
+                iconName = 'settings';
+              }
+              return <Icon name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#4B0082',
+            tabBarInactiveTintColor: 'gray',
+          })}
+        >
+          <Tab.Screen name="AddWorkout" component={AddWorkout} />
+          <Tab.Screen name="ExerciseHistory" component={ExerciseHistory} />
+          <Tab.Screen name="Settings" component={Settings} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </WorkoutProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
