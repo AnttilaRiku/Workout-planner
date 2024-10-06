@@ -6,7 +6,7 @@ import { WorkoutContext } from '../context/WorkoutContext';
 import styles from '../Styles/Styles';
 
 export default function ExerciseHistory() {
-  const { workouts } = useContext(WorkoutContext);
+  const { workouts, unit } = useContext(WorkoutContext);
   const [selectedSport, setSelectedSport] = useState('all');
 
   const filterWorkoutsBySport = (sport) => {
@@ -23,11 +23,18 @@ export default function ExerciseHistory() {
     return filteredWorkouts.reduce((sum, workout) => sum + workout.distance, 0);
   };
 
+  const renderDistance = (distance) => {
+    // Convert distance to miles if the unit is set to miles
+    return unit === 'miles' ? (distance / 1.61).toFixed(2) : distance.toFixed(2);
+  };
+
   const renderWorkouts = (filteredWorkouts) => {
     return filteredWorkouts.map((workout, index) => (
       <View key={index} style={styles.workoutItem}>
         <Text style={styles.workoutText}>{workout.sport}</Text>
-        <Text style={styles.workoutText}>Distance: {workout.distance} km</Text>
+        <Text style={styles.workoutText}>
+          Distance: {renderDistance(workout.distance)} {unit === 'miles' ? 'miles' : 'km'}
+        </Text>
         <Text style={styles.workoutText}>Duration: {workout.duration} min</Text>
         <Text style={styles.workoutText}>Date: {workout.date}</Text>
       </View>
@@ -38,7 +45,7 @@ export default function ExerciseHistory() {
   const totalDistance = calculateTotalDistance(filteredWorkouts);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>**
       <Text style={styles.header}>Workout History</Text>
 
       <View style={styles.buttonRow}>
@@ -77,7 +84,7 @@ export default function ExerciseHistory() {
       </View>
 
       <Text style={styles.totalDistanceText}>
-        Total Distance: {totalDistance} km
+        Total Distance: {renderDistance(totalDistance)} {unit === 'miles' ? 'miles' : 'km'}
       </Text>
 
       <ScrollView style={styles.workoutList}>

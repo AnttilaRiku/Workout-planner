@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from '../Styles/Styles';
 
 export default function Settings() {
-  const { unit, setUnit } = useContext(WorkoutContext); 
+  const { unit, setUnit } = useContext(WorkoutContext);
 
   return (
     <View style={styles.container}>

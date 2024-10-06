@@ -7,8 +7,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from '../Styles/Styles';
 
 export default function AddWorkout() {
-  const { addWorkout } = useContext(WorkoutContext);
-  
+  const { addWorkout, unit } = useContext(WorkoutContext);
+  //Setting up miles and kilometers
+  const unitName = unit === 'miles' ? 'Miles' : 'Kilometers';
+
   const [sport, setSport] = useState('running');
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
@@ -16,13 +18,13 @@ export default function AddWorkout() {
   const [calendarVisible, setCalendarVisible] = useState(false);
 
 
-  //Alerts on typical user input errors
+  //Alerts on typical user input errors (should not be possible but just in case)
   const handleAddWorkout = () => {
     if (isNaN(distance) || isNaN(duration)) {
       Alert.alert('Error', 'Please enter valid numeric values.');
       return;
     }
-    
+
     if (distance < 0 || duration < 0) {
       Alert.alert('Error', 'Distance and duration must be positive values.');
       return;
@@ -34,7 +36,7 @@ export default function AddWorkout() {
       duration: parseFloat(duration),
       date,
     };
-    
+
     addWorkout(newWorkout);
     Alert.alert('Success', 'Workout added successfully!');
     resetForm();
@@ -76,13 +78,13 @@ export default function AddWorkout() {
       </View>
 
       <TextInput
-        label="Distance (km)"
+        label={`Distance (${unitName})`}
         mode="outlined"
         keyboardType="numeric"
         value={distance}
         onChangeText={setDistance}
-        style={styles.input}/>
-      
+        style={styles.input} />
+
 
       <TextInput
         label="Duration (minutes)"
@@ -90,10 +92,10 @@ export default function AddWorkout() {
         keyboardType="numeric"
         value={duration}
         onChangeText={setDuration}
-        style={styles.input}/>
+        style={styles.input} />
 
-       {/*Calendar goes visible here after the button is pressed*/}
-       
+      {/*Calendar goes visible here after the button is pressed*/}
+
       <Text style={styles.label}>Date</Text>
       <Button onPress={() => setCalendarVisible(true)} style={styles.dateButton}>
         {date || 'Select Date'}
